@@ -30,7 +30,7 @@ const ContactSection: React.FC = () => {
     setIsLoading(true);
     
     try {
-      const response = await axios.post('http://localhost:5000/api/contact', formData);
+      const response = await axios.post('https://preetam-portfolio-zeta.vercel.app/api/contact', formData);', formData);
       
       if (response.data.success) {
         toast.success('Message sent successfully!');
