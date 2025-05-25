@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ContactFormData } from './types';
 
 const API_BASE_URL = import.meta.env.PROD 
-  ? '' // Production URL will be relative
+  ? '' // In production, use relative URL
   : 'http://localhost:5000';
 
 export const sendContactForm = async (formData: ContactFormData) => {
