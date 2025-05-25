@@ -3,6 +3,7 @@ import { Link } from 'react-scroll';
 import { motion } from 'framer-motion';
 import { ArrowDownCircle } from 'lucide-react';
 import Button from '../components/Button';
+import myImage from '../../preetam.jpg'
 
 const HeroSection: React.FC = () => {
   return (
@@ -52,7 +53,7 @@ const HeroSection: React.FC = () => {
         >
           <div className="relative rounded-lg overflow-hidden border-4 border-primary/20 shadow-xl">
             <img 
-              src="/preetam.jpg" 
+              src={myImage}
               alt="Developer Portrait" 
               className="w-full h-auto"
             />
