@@ -5,15 +5,19 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-dotenv.config();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load environment variables from .env file
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:4173', 'https://preetamprabhu.netlify.app', process.env.FRONTEND_URL || '*'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Nodemailer configuration
@@ -23,6 +27,15 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER || '',
     pass: process.env.EMAIL_PASS || '',
   },
+});
+
+// Root endpoint - health check
+app.get('/', (req, res) => {
+  res.status(200).json({ 
+    status: 'success', 
+    message: 'Server is running',
+    endpoints: ['/api/contact'] 
+  });
 });
 
 // API Endpoints
