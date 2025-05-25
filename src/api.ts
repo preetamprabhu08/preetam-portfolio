@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ContactFormData } from './types';
 
 const API_BASE_URL = import.meta.env.PROD 
-  ? 'https://preetam-portfolio-pied.vercel.app' // Vercel server URL (update this after deployment)
+  ? 'https://preetam-portfolio-sepia.vercel.app' // Vercel server URL (update this after deployment)
   : 'http://localhost:5000';
 
 export const sendContactForm = async (formData: ContactFormData) => {
