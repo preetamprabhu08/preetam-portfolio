@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Mail, Phone, MapPin } from 'lucide-react';
 import Button from '../components/Button';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ContactFormData } from '../types';
+import { sendContactForm } from '../api';
 
 const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState<ContactFormData>({
@@ -30,13 +30,13 @@ const ContactSection: React.FC = () => {
     setIsLoading(true);
     
     try {
-      const response = await axios.post('http://localhost:5000/api/contact', formData);
+      const response = await sendContactForm(formData);
       
-      if (response.data.success) {
+      if (response.success) {
         toast.success('Message sent successfully!');
         setFormData({ name: '', email: '', message: '' });
       } else {
-        toast.error(response.data.message || 'Failed to send message. Please try again.');
+        toast.error(response.message || 'Failed to send message. Please try again.');
       }
     } catch (error) {
       console.error('Error sending message:', error);

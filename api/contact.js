@@ -1,38 +1,40 @@
-import express from 'express';
-import cors from 'cors';
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
-dotenv.config();
+export default async function handler(req, res) {
+  // Only allow POST method
+  if (req.method !== 'POST') {
+    return res.status(405).json({ success: false, message: 'Method not allowed' });
+  }
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
 
-const app = express();
+  // Handle OPTIONS request for CORS preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Nodemailer configuration
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER || '',
-    pass: process.env.EMAIL_PASS || '',
-  },
-});
-
-// API Endpoints
-app.post('/api/contact', async (req, res) => {
   try {
     const { name, email, message } = req.body;
     
     if (!name || !email || !message) {
       return res.status(400).json({ success: false, message: 'Please provide all required fields' });
     }
+    
+    // Nodemailer configuration
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER || '',
+        pass: process.env.EMAIL_PASS || '',
+      },
+    });
     
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -57,15 +59,4 @@ app.post('/api/contact', async (req, res) => {
     console.error('Error sending email: ', error);
     return res.status(500).json({ success: false, message: 'Failed to send message' });
   }
-});
-
-// For local development
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
-
-// Export for Vercel
-export default app;
+} 
