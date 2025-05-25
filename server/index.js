@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 });
 
 // API Endpoints
-app.post('/api/contact', async (req, res) => {
+app.post('/', async (req, res) => {
   try {
     const { name, email, message } = req.body;
     
