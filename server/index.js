@@ -25,6 +25,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Add a simple GET route for the root path
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Server is running' });
+});
+
 // API Endpoints
 app.post('/api/contact', async (req, res) => {
   try {
