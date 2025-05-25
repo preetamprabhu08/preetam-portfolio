@@ -5,16 +5,20 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-dotenv.config();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load environment variables from .env file
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:4173', 'https://preetamprabhu.netlify.app', process.env.FRONTEND_URL || '*'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Serve static files from the React app
